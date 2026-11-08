@@ -6,5 +6,6 @@ public class Main {
     static void main() {
             DiningAPIClient client = new DiningAPIClient();
             IO.println(client.findAll());
+            IO.println(client.findAtLocation("Windsor"));
         }
 }
