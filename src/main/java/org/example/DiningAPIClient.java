@@ -40,7 +40,7 @@ public class DiningAPIClient {
     private static String getDate() {
         LocalDate today = LocalDate.now();
         //return today.toString();
-        return "2026-11-14";
+        return "2026-11-14"; // for testing purposes
     }
 
     // parse should iterate through meals, check if each meal is closed
