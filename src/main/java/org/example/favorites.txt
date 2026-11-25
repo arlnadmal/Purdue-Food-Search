@@ -3,3 +3,5 @@ Lamb
 Rice
 Broccoli
 Egg and Ham Bake
+Fries
+Eggs

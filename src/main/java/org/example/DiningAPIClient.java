@@ -6,7 +6,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 /**
@@ -19,7 +18,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class DiningAPIClient {
     private static final String baseURL = "https://api.hfs.purdue.edu/menus/v2/locations/";
-    private static final String[] locations  = {"Hillenbrand", "Earhart", "Windsor", "Wiley", "Ford"};
     private static final HttpClient client = HttpClient.newHttpClient();
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -48,15 +46,20 @@ public class DiningAPIClient {
     // IF NOT CLOSED -> :
     // Iterate through station
     // Iterate through item in station
-    // Get name of food
+    // If match -> Print
     public static void parse(String src) {
         Matcher matcher = new Matcher();
         try {
             JsonNode root = objectMapper.readTree(src);
             JsonNode meals = root.get("Meals");
             for (JsonNode meal : meals) {
+                IO.println("=========");
                 IO.println(getName(meal));
-                if (meal.get("Status").asText().equals("Closed")) continue;
+                if (meal.get("Status").asText().equals("Closed")) {
+                    IO.println("Closed");
+                    IO.println("=========");
+                    continue;
+                }
                 JsonNode stations = meal.get("Stations");
                 for (JsonNode station : stations) {
                     IO.println("--------");
@@ -68,6 +71,8 @@ public class DiningAPIClient {
                             IO.println(foodName);
                         }
                     }
+                    IO.println("--------");
+
                 }
             }
         } catch (IOException e) {
