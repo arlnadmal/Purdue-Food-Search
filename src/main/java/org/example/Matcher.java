@@ -7,24 +7,54 @@ import java.util.HashSet;
 
 public class Matcher {
     private HashSet<String> favorites;
-    private String filePath = "src/main/java/org/example/favorites.txt";
+    private HashSet<String> dislikes;
+    private final String favoritesFilePath = "src/main/java/org/example/favorites.txt";
+    private final String dislikesFilePath = "src/main/java/org/example/dislikes.txt";
 
-    // initialize favorites array by reading from the text file
+    // initialize favorites and dislikes lists by reading from their respective files
     public Matcher() {
         favorites = new HashSet<>();
-        try (BufferedReader in = new BufferedReader(new FileReader(filePath))) {
-            String line = in.readLine();
+        dislikes = new HashSet<>();
+        try (BufferedReader favoritesIn = new BufferedReader(new FileReader(favoritesFilePath));
+             BufferedReader dislikesIn = new BufferedReader(new FileReader(dislikesFilePath))){
+
+            // initialize favorites
+            String line = favoritesIn.readLine();
             while (line != null) {
                 favorites.add(line);
-                line = in.readLine();
+                line = favoritesIn.readLine();
             }
-        } catch (IOException e) {
 
+            // initialize dislikes
+            line = dislikesIn.readLine();
+            while (line != null) {
+                dislikes.add(line);
+                line = dislikesIn.readLine();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        IO.println(favorites.size());
     }
 
-    public boolean isMatch(String food) {
-        return favorites.contains(food);
+
+
+    // Should check if the food matches anything in favorites
+    // AND that no parts of the food are in dislikes
+    public boolean isMatch(String item) {
+        if (favorites.contains(item)) {
+            return true;
+        }
+
+        String[] foods = item.split(" ");
+        int numFavorite = 0;
+        for (String food : foods) {
+            if (dislikes.contains(food)) {
+                return false;
+            } else if (favorites.contains(food)) {
+                numFavorite++;
+            }
+        }
+        return numFavorite > 0;
     }
 }
