@@ -21,7 +21,7 @@ public class DiningAPIClient {
     private static final String baseURL = "https://api.hfs.purdue.edu/menus/v2/locations/";
     private static final String[] locations  = {"Hillenbrand", "Earhart", "Windsor", "Wiley", "Ford"};
     private static final HttpClient client = HttpClient.newHttpClient();
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     // Get all the data from a specific dining hall
     public static String findAtLocation(String location) {
@@ -55,15 +55,15 @@ public class DiningAPIClient {
             JsonNode root = objectMapper.readTree(src);
             JsonNode meals = root.get("Meals");
             for (JsonNode meal : meals) {
-                IO.println(meal.get("Name").asText());
+                IO.println(getName(meal));
                 if (meal.get("Status").asText().equals("Closed")) continue;
                 JsonNode stations = meal.get("Stations");
                 for (JsonNode station : stations) {
                     IO.println("--------");
-                    IO.println(station.get("Name").asText());
+                    IO.println(getName(station));
                     JsonNode items = station.get("Items");
                     for (JsonNode item : items) {
-                        String foodName = item.get("Name").asText();
+                        String foodName = getName(item);
                         if (matcher.isMatch(foodName)) {
                             IO.println(foodName);
                         }
@@ -73,5 +73,9 @@ public class DiningAPIClient {
         } catch (IOException e) {
 
         }
+    }
+
+    private static String getName(JsonNode node) {
+        return node.get("Name").asText();
     }
 }
