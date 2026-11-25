@@ -1,11 +1,9 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class Main {
     static void main() {
-            DiningAPIClient client = new DiningAPIClient();
-            IO.println(client.findAll());
-            IO.println(client.findAtLocation("Windsor"));
-        }
+
+    }
 }
