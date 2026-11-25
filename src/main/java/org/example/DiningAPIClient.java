@@ -1,4 +1,4 @@
-//package org.example;
+package org.example;
 
 import java.io.IOException;
 import java.net.URI;
@@ -50,6 +50,7 @@ public class DiningAPIClient {
     // Iterate through item in station
     // Get name of food
     public static void parse(String src) {
+        Matcher matcher = new Matcher();
         try {
             JsonNode root = objectMapper.readTree(src);
             JsonNode meals = root.get("Meals");
@@ -62,7 +63,10 @@ public class DiningAPIClient {
                     IO.println(station.get("Name").asText());
                     JsonNode items = station.get("Items");
                     for (JsonNode item : items) {
-                        IO.println(item.get("Name").asText());
+                        String foodName = item.get("Name").asText();
+                        if (matcher.isMatch(foodName)) {
+                            IO.println(foodName);
+                        }
                     }
                 }
             }
@@ -70,8 +74,4 @@ public class DiningAPIClient {
 
         }
     }
-}
-
-void main() {
-    DiningAPIClient.parse(DiningAPIClient.findAtLocation("Windsor"));
 }

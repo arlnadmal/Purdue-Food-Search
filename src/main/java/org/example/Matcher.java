@@ -1,8 +1,9 @@
-//package org.example;
+package org.example;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
 
 public class Matcher {
     private HashSet<String> favorites;
@@ -26,8 +27,4 @@ public class Matcher {
     public boolean isMatch(String food) {
         return favorites.contains(food);
     }
-}
-
-void main() {
-    Matcher matcher = new Matcher();
 }
