@@ -37,24 +37,25 @@ public class Matcher {
         }
     }
 
-
-
     // Should check if the food matches anything in favorites
     // AND that no parts of the food are in dislikes
     public boolean isMatch(String item) {
-        if (favorites.contains(item)) {
-            return true;
-        }
-
         String[] foods = item.split(" ");
-        int numFavorite = 0;
+
+        // make sure no dislikes
         for (String food : foods) {
             if (dislikes.contains(food)) {
                 return false;
-            } else if (favorites.contains(food)) {
-                numFavorite++;
             }
         }
-        return numFavorite > 0;
+
+        // check if contains any favorites
+        for (String favorite : favorites) {
+            if (item.contains(favorite)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
