@@ -17,6 +17,10 @@ public class PageGenerator {
     public static void generate() {
         try (FileWriter writer = new FileWriter("results.html")) {
             writer.write(htmlTemplateOpen);
+
+            // add all the results
+            writer.write(Tags.h1("Purdue Food Search"));
+
             writer.write(htmlTemplateClose);
         } catch (IOException e) {
             e.printStackTrace();
