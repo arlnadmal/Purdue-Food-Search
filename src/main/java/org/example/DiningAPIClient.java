@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * DiningAPIClient.java
  *
- * Handles the requests to Purdue Dining API
+ * Handles the requests to Purdue Dining API and parses responses
  *
  * @author Arln Admal
  * @version Nov 14, 2026
@@ -76,10 +76,11 @@ public class DiningAPIClient {
                 }
             }
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
     }
 
+    // return the name of given node
     private static String getName(JsonNode node) {
         return node.get("Name").asText();
     }

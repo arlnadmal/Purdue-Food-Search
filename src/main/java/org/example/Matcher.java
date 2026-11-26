@@ -8,15 +8,13 @@ import java.util.HashSet;
 public class Matcher {
     private HashSet<String> favorites;
     private HashSet<String> dislikes;
-    private final String favoritesFilePath = "src/main/java/org/example/favorites.txt";
-    private final String dislikesFilePath = "src/main/java/org/example/dislikes.txt";
 
     // initialize favorites and dislikes lists by reading from their respective files
     public Matcher() {
         favorites = new HashSet<>();
         dislikes = new HashSet<>();
-        try (BufferedReader favoritesIn = new BufferedReader(new FileReader(favoritesFilePath));
-             BufferedReader dislikesIn = new BufferedReader(new FileReader(dislikesFilePath))){
+        try (BufferedReader favoritesIn = new BufferedReader(new FileReader("favorites.txt"));
+             BufferedReader dislikesIn = new BufferedReader(new FileReader("dislikes.txt"))){
 
             // initialize favorites
             String line = favoritesIn.readLine();
@@ -40,9 +38,9 @@ public class Matcher {
     // Should check if the food matches anything in favorites
     // AND that no parts of the food are in dislikes
     public boolean isMatch(String item) {
-        String[] foods = item.split(" ");
 
         // make sure no dislikes
+        String[] foods = item.split(" ");
         for (String food : foods) {
             if (dislikes.contains(food)) {
                 return false;
