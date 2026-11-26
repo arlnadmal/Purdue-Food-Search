@@ -53,26 +53,28 @@ public class DiningAPIClient {
             JsonNode root = objectMapper.readTree(src);
             JsonNode meals = root.get("Meals");
             for (JsonNode meal : meals) {
-                IO.println("=========");
-                IO.println(getName(meal));
+                PageGenerator.writeMeal(getName(meal));
                 if (meal.get("Status").asText().equals("Closed")) {
-                    IO.println("Closed");
-                    IO.println("=========");
+                    PageGenerator.writeStatusClosed();
                     continue;
                 }
                 JsonNode stations = meal.get("Stations");
                 for (JsonNode station : stations) {
-                    IO.println("--------");
-                    IO.println(getName(station));
+                    PageGenerator.writeStation(getName(station));
                     JsonNode items = station.get("Items");
+                    PageGenerator.startList();
+                    boolean match = false;
                     for (JsonNode item : items) {
                         String foodName = getName(item);
                         if (matcher.isMatch(foodName)) {
-                            IO.println(foodName);
+                            match = true;
+                            PageGenerator.writeItem(foodName);
                         }
                     }
-                    IO.println("--------");
-
+                    if (!match) {
+                        PageGenerator.writeItem("None");
+                    }
+                    PageGenerator.endList();
                 }
             }
         } catch (IOException e) {

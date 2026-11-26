@@ -1,15 +1,37 @@
 package org.example;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+
 public class Main {
     private static final String[] locations  = {"Hillenbrand", "Earhart", "Windsor", "Wiley", "Ford"};
 
-    static void main() {
+    private static void runClient() {
+        PageGenerator.open();
         for (String location : locations) {
-            IO.println(location);
-            IO.println("+++++++++++++\n*************");
+            PageGenerator.startLoc(location);
             DiningAPIClient.parse(DiningAPIClient.findAtLocation(location));
-            IO.println("+++++++++++++\n*************");
+            PageGenerator.endLoc(location);
         }
-        PageGenerator.generate();
+        PageGenerator.close();
+    }
+
+    private static void openInBrowser() {
+        try {
+            File results = new File("results.html");
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().browse(results.toURI());
+            } else {
+                System.out.println("Desktop API is not supported on this platform.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void main() {
+        runClient();
+        openInBrowser();
     }
 }

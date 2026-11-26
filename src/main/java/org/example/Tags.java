@@ -13,17 +13,15 @@ public class Tags {
         return "<h3>" + text + "</h3>";
     }
 
-    public static String button(String text) {
-        return "<button>" + text + "</button>";
-    }
-
-    public static String ul(String text) {
-        return "<ul>" + text + "</ul>";
+    public static String h4(String text) {
+        return "<h4>" + text + "</h4>";
     }
 
     public static String li(String text) {
         return "<li>" + text + "</li>";
     }
 
-
+    public static String paragraph(String text) {
+        return "<p>" + text + "</p>";
+    }
 }
