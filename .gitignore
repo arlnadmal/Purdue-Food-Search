@@ -40,3 +40,9 @@ build/
 
 ### Results ###
 results.html
+
+### javac output ###
+out/
+
+### Dependencies ###
+lib/

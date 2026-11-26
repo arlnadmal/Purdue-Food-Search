@@ -59,23 +59,17 @@ public class DiningAPIClient {
                     continue;
                 }
                 JsonNode stations = meal.get("Stations");
+                PageGenerator.startList();
                 for (JsonNode station : stations) {
-                    PageGenerator.writeStation(getName(station));
                     JsonNode items = station.get("Items");
-                    PageGenerator.startList();
-                    boolean match = false;
                     for (JsonNode item : items) {
                         String foodName = getName(item);
                         if (matcher.isMatch(foodName)) {
-                            match = true;
                             PageGenerator.writeItem(foodName);
                         }
                     }
-                    if (!match) {
-                        PageGenerator.writeItem("None");
-                    }
-                    PageGenerator.endList();
                 }
+                PageGenerator.endList();
             }
         } catch (IOException e) {
             e.printStackTrace();
