@@ -10,5 +10,6 @@ public class Main {
             DiningAPIClient.parse(DiningAPIClient.findAtLocation(location));
             IO.println("+++++++++++++\n*************");
         }
+        PageGenerator.generate();
     }
 }
