@@ -38,8 +38,10 @@ build/
 ### Mac OS ###
 .DS_Store
 
-### Results ###
+### Dynamically Generated HTML Files ###
 results.html
+dislikes.html
+favorites.html
 
 ### javac output ###
 out/

@@ -12,9 +12,11 @@ public class Main {
         for (String location : locations) {
             PageGenerator.startLoc(location);
             DiningAPIClient.parse(DiningAPIClient.findAtLocation(location));
-            PageGenerator.endLoc(location);
+            PageGenerator.endLoc();
         }
         PageGenerator.close();
+        PageGenerator.generateFavorites();
+        PageGenerator.generateDislikes();
     }
 
     private static void openInBrowser() {

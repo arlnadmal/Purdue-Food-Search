@@ -21,6 +21,10 @@ public class Tags {
         return "<li>" + text + "</li>";
     }
 
+    public static String button(String text) {
+        return "<button>" + text + "</button>";
+    }
+
     public static String paragraph(String text) {
         return "<p>" + text + "</p>";
     }

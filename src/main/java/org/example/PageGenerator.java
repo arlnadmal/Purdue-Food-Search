@@ -14,6 +14,7 @@ public class PageGenerator {
             + "<body>";
     private static final String htmlTemplateClose = "\r\n</body>\r\n" + "</html>";
     private static FileWriter writer = null;
+    private static Matcher matcher = new Matcher();
 
     // gets the html ready to be written into
     public static void open() {
@@ -29,8 +30,50 @@ public class PageGenerator {
     // end the html file
     public static void close() {
         try {
+            writer.write("<a href=\"favorites.html\">"
+                        + Tags.button("Show Favorites")
+                        + "</a>");
+            writer.write("<a href=\"dislikes.html\">"
+                        + Tags.button("Show Dislikes")
+                        + "</a>");
             writer.write(htmlTemplateClose);
             writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void generateFavorites() {
+        try (FileWriter favWriter = new FileWriter("favorites.html")) {
+            favWriter.write(htmlTemplateOpen);
+            favWriter.write(Tags.h1("Favorites"));
+            favWriter.write("<ul>");
+            for (String favorite : matcher.getFavorites()) {
+                favWriter.write(Tags.li(favorite));
+            }
+            if (matcher.getFavorites().isEmpty()) {
+                favWriter.write(Tags.li("None"));
+            }
+            favWriter.write("</ul>");
+            favWriter.write(htmlTemplateClose);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void generateDislikes() {
+        try (FileWriter dislikesWriter = new FileWriter("dislikes.html")) {
+            dislikesWriter.write(htmlTemplateOpen);
+            dislikesWriter.write(Tags.h1("Dislikes"));
+            dislikesWriter.write("<ul>");
+            for (String dislike : matcher.getDislikes()) {
+                dislikesWriter.write(Tags.li(dislike));
+            }
+            if (matcher.getDislikes().isEmpty()) {
+                dislikesWriter.write(Tags.li("None"));
+            }
+            dislikesWriter.write("</ul>");
+            dislikesWriter.write(htmlTemplateClose);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,7 +90,7 @@ public class PageGenerator {
     }
 
     // ends the section for the current location
-    public static void endLoc(String location) {
+    public static void endLoc() {
         try {
             writer.write("</h2>");
         } catch (IOException e) {
@@ -62,10 +105,6 @@ public class PageGenerator {
 
     public static void writeStatusClosed() throws IOException {
         writer.write(Tags.paragraph("Closed"));
-    }
-
-    public static void writeStation(String station) throws IOException {
-        writer.write(Tags.h4(station));
     }
 
     public static void writeItem(String item) throws IOException {

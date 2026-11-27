@@ -1,8 +1,6 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashSet;
 
 public class Matcher {
@@ -55,5 +53,13 @@ public class Matcher {
         }
 
         return false;
+    }
+
+    public HashSet<String> getFavorites() {
+        return favorites;
+    }
+
+    public HashSet<String> getDislikes() {
+        return dislikes;
     }
 }
