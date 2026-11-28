@@ -1,7 +1,10 @@
 package org.example;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class PageGenerator {
     private static final String htmlTemplateOpen = "<!DOCTYPE html>\r\n"
@@ -14,7 +17,8 @@ public class PageGenerator {
             + "<body>";
     private static final String htmlTemplateClose = "\r\n</body>\r\n" + "</html>";
     private static FileWriter writer = null;
-    private static Matcher matcher = new Matcher();
+    private static final Matcher matcher = new Matcher();
+    private static final HashMap<String, String> macrosSections = new HashMap<>();
 
     // gets the html ready to be written into
     public static void open() {
@@ -79,6 +83,19 @@ public class PageGenerator {
         }
     }
 
+    public static void generateMacros() {
+        try (FileWriter macrosWriter = new FileWriter("macros.html")) {
+            macrosWriter.write(htmlTemplateOpen);
+            macrosWriter.write("<style>section{display:none} section:target{display:block}</style>");
+            for (String section : macrosSections.values()) {
+                macrosWriter.write(section);
+            }
+            macrosWriter.write(htmlTemplateClose);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     // starts the section for the current location
     public static void startLoc(String location) {
         try {
@@ -107,8 +124,34 @@ public class PageGenerator {
         writer.write(Tags.paragraph("Closed"));
     }
 
-    public static void writeItem(String item) throws IOException {
-        writer.write(Tags.li(item));
+    public static void writeItem(String item, String id) throws IOException {
+        String link = "macros.html#" + id;
+        writer.write(Tags.li(Tags.link(link, item)));
+        if (!macrosSections.containsKey(id)) {
+            macrosSections.put(id, createMacroSection(item, id, DiningAPIClient.getItemDetails(id)));
+        }
+    }
+
+    private static String createMacroSection(String name, String id, JsonNode details) {
+        StringBuilder section = new StringBuilder();
+        section.append("<section id=\"" + id + "\">");
+        String header = "Nutrition Facts for " + name;
+        section.append(Tags.h1(header));
+        if (details == null || details.get("Nutrition") == null) {
+            section.append(Tags.paragraph("No Nutrition Facts Available"));
+        } else {
+            JsonNode nutritionFacts = details.get("Nutrition");
+            section.append("<table>");
+
+            for (JsonNode fact : nutritionFacts) {
+                section.append("<tr><td>" + fact.get("Name").asText("Unavailable") + "</td><td>");
+                section.append(fact.get("LabelValue").asText("Unavailable") + "</td></tr>");
+            }
+            section.append("</table>");
+        }
+        section.append("</section>");
+
+        return section.toString();
     }
 
     public static void startList() throws IOException {

@@ -13,8 +13,8 @@ public class Tags {
         return "<h3>" + text + "</h3>";
     }
 
-    public static String h4(String text) {
-        return "<h4>" + text + "</h4>";
+    public static String link(String link, String text) {
+        return "<a href=\"" + link + "\">" + text + "</a>";
     }
 
     public static String li(String text) {

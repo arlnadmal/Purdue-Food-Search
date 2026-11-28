@@ -6,6 +6,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 /**
@@ -18,6 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class DiningAPIClient {
     private static final String baseURL = "https://api.hfs.purdue.edu/menus/v2/locations/";
+    private static final String itemBaseURL = "https://api.hfs.purdue.edu/menus/v2/items/";
+    private static final HashMap<String, JsonNode> itemDetails = new HashMap<>();
     private static final HttpClient client = HttpClient.newHttpClient();
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -58,14 +63,19 @@ public class DiningAPIClient {
                     PageGenerator.writeStatusClosed();
                     continue;
                 }
+                HashSet<String> displayedMeals = new HashSet<>(); // Ensure the same meal isn't displayed twice
                 JsonNode stations = meal.get("Stations");
                 PageGenerator.startList();
                 for (JsonNode station : stations) {
                     JsonNode items = station.get("Items");
                     for (JsonNode item : items) {
                         String foodName = getName(item);
-                        if (matcher.isMatch(foodName)) {
-                            PageGenerator.writeItem(foodName);
+
+                        // Check if in favorites & not in dislikes and has not been displayed previously
+                        if (matcher.isMatch(foodName) && !displayedMeals.contains(foodName)) {
+                            String id = item.get("ID").asText();
+                            displayedMeals.add(foodName);
+                            PageGenerator.writeItem(foodName, id);
                         }
                     }
                 }
@@ -74,6 +84,24 @@ public class DiningAPIClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static JsonNode getItemDetails(String id) {
+        if (itemDetails.containsKey(id)) {
+            return itemDetails.get(id);
+        }
+        String url = itemBaseURL + id;
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
+        HttpResponse<String> response = null;
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            JsonNode details = objectMapper.readTree(response.body());
+            itemDetails.put(id, details);
+            return details;
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // return the name of given node

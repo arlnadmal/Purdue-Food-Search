@@ -17,6 +17,7 @@ public class Main {
         PageGenerator.close();
         PageGenerator.generateFavorites();
         PageGenerator.generateDislikes();
+        PageGenerator.generateMacros();
     }
 
     private static void openInBrowser() {
