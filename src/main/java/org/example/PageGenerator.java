@@ -4,7 +4,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-
+/**
+ * PageGenerator.java
+ *
+ * Provides methods to generate html pages
+ *
+ * @author Arln Admal
+ * @version Nov 27, 2026
+ */
 public class PageGenerator {
     private static final String htmlTemplateOpen = "<!DOCTYPE html>\r\n"
             + "<html lang=\"en\">\r\n"
@@ -46,46 +53,49 @@ public class PageGenerator {
         }
     }
 
+    // create favorites.html
     public static void generateFavorites() {
         try (FileWriter favWriter = new FileWriter("favorites.html")) {
             favWriter.write(htmlTemplateOpen);
             favWriter.write(Tags.h1("Favorites"));
-            favWriter.write("<ul>");
+            favWriter.write("<ul>"); // start list
             for (String favorite : matcher.getFavorites()) {
                 favWriter.write(Tags.li(favorite));
             }
             if (matcher.getFavorites().isEmpty()) {
                 favWriter.write(Tags.li("None"));
             }
-            favWriter.write("</ul>");
+            favWriter.write("</ul>"); // end list
             favWriter.write(htmlTemplateClose);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    // create dislikes.html
     public static void generateDislikes() {
         try (FileWriter dislikesWriter = new FileWriter("dislikes.html")) {
             dislikesWriter.write(htmlTemplateOpen);
             dislikesWriter.write(Tags.h1("Dislikes"));
-            dislikesWriter.write("<ul>");
+            dislikesWriter.write("<ul>"); // start list
             for (String dislike : matcher.getDislikes()) {
                 dislikesWriter.write(Tags.li(dislike));
             }
             if (matcher.getDislikes().isEmpty()) {
                 dislikesWriter.write(Tags.li("None"));
             }
-            dislikesWriter.write("</ul>");
+            dislikesWriter.write("</ul>"); // end list
             dislikesWriter.write(htmlTemplateClose);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    // create macros.html
     public static void generateMacros() {
         try (FileWriter macrosWriter = new FileWriter("macros.html")) {
             macrosWriter.write(htmlTemplateOpen);
-            macrosWriter.write("<style>section{display:none} section:target{display:block}</style>");
+            macrosWriter.write("<style>section{display:none} section:target{display:block}</style>"); // css styling to display only one section
             for (String section : macrosSections.values()) {
                 macrosWriter.write(section);
             }
@@ -123,6 +133,8 @@ public class PageGenerator {
         writer.write(Tags.paragraph("Closed"));
     }
 
+    // writes to macros.html
+    // separates each item by section
     public static void writeItem(String item, String id) throws IOException {
         String link = "macros.html#" + id;
         writer.write(Tags.li(Tags.link(link, item)));
@@ -131,6 +143,7 @@ public class PageGenerator {
         }
     }
 
+    // generates the section for one item
     private static String createMacroSection(String name, String id, JsonNode details) {
         StringBuilder section = new StringBuilder();
         section.append("<section id=\"" + id + "\">");
@@ -139,9 +152,9 @@ public class PageGenerator {
         if (details == null || details.get("Nutrition") == null) {
             section.append(Tags.paragraph("No Nutrition Facts Available"));
         } else {
+            // create nutrition facts table
             JsonNode nutritionFacts = details.get("Nutrition");
             section.append("<table>");
-
             for (JsonNode fact : nutritionFacts) {
                 section.append("<tr><td>" + fact.get("Name").asText("Unavailable") + "</td><td>");
                 section.append(fact.get("LabelValue").asText("Unavailable") + "</td></tr>");

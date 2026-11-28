@@ -2,7 +2,14 @@ package org.example;
 
 import java.io.*;
 import java.util.HashSet;
-
+/**
+ * Matcher.java
+ *
+ * Provides methods to compare foods to favorites and dislikes
+ *
+ * @author Arln Admal
+ * @version Nov 27, 2026
+ */
 public class Matcher {
     private HashSet<String> favorites;
     private HashSet<String> dislikes;

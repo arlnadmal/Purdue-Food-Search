@@ -41,8 +41,7 @@ public class DiningAPIClient {
     // Get the today's date
     private static String getDate() {
         LocalDate today = LocalDate.now();
-        //return today.toString();
-        return "2026-11-15"; // for testing purposes
+        return today.toString();
     }
 
     // parse should iterate through meals, check if each meal is closed

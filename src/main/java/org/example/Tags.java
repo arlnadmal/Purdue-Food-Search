@@ -1,5 +1,12 @@
 package org.example;
-
+/**
+ * Tags.java
+ *
+ * Surrounds text with different html tags to make creating html pages easier
+ *
+ * @author Arln Admal
+ * @version Nov 27, 2026
+ */
 public class Tags {
     public static String h1(String text) {
         return "<h1>" + text + "</h1>";
