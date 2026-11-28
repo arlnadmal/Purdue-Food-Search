@@ -7,6 +7,7 @@ import java.io.IOException;
 public class Main {
     private static final String[] locations  = {"Hillenbrand", "Earhart", "Windsor", "Wiley", "Ford"};
 
+    // runs the DiningAPIClient and generates output files
     private static void runClient() {
         PageGenerator.open();
         for (String location : locations) {

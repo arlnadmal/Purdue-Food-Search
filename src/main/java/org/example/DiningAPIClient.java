@@ -8,7 +8,6 @@ import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 /**
@@ -43,7 +42,7 @@ public class DiningAPIClient {
     private static String getDate() {
         LocalDate today = LocalDate.now();
         //return today.toString();
-        return "2026-11-14"; // for testing purposes
+        return "2026-11-15"; // for testing purposes
     }
 
     // parse should iterate through meals, check if each meal is closed
@@ -51,7 +50,7 @@ public class DiningAPIClient {
     // IF NOT CLOSED -> :
     // Iterate through station
     // Iterate through item in station
-    // If match -> Print
+    // If match -> Display meal
     public static void parse(String src) {
         Matcher matcher = new Matcher();
         try {
@@ -86,6 +85,7 @@ public class DiningAPIClient {
         }
     }
 
+    // Returns the details about an item using the dining API
     public static JsonNode getItemDetails(String id) {
         if (itemDetails.containsKey(id)) {
             return itemDetails.get(id);
